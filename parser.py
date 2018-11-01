@@ -14,15 +14,12 @@ with open(exFileName) as f:
     jsonPage = json.load(f)
 
 jsonPage = jsonPage['parse']
-matches = re.finditer(WIKILINK_REGEX, jsonPage['text']['*'], re.IGNORECASE | re.UNICODE)
+rgx = re.compile(WIKILINK_REGEX)
+matches = rgx.findall(jsonPage['text']['*'])
+#matches = re.finditer(WIKILINK_REGEX, jsonPage['text']['*'], re.IGNORECASE | re.UNICODE)
+matches = [match for match in matches if match[:5] != 'File:']
 
-for matchNum, match in enumerate(matches):
-    print(match)
-    matchNum = matchNum + 1
-        
-    print ("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum = matchNum, start = match.start(), end = match.end(), match = match.group()))
-        
-    for groupNum in range(0, len(match.groups())):
-        groupNum = groupNum + 1
-            
-        print ("Group {groupNum} found at {start}-{end}: {group}".format(groupNum = groupNum, start = match.start(groupNum), end = match.end(groupNum), group = match.group(groupNum)))
+   
+L = list(set(matches))
+
+print(L[:20])
