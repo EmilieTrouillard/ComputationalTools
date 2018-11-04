@@ -5,11 +5,7 @@ and stores the links between pages in a serialized file.
 '''
 import pickle
 import mmh3
-
-print('Enter the name of the file from which you want to read the articles:')
-articlesFile = input()
-print('Enter the name of the file in which you want to store the links:')
-pickledFileName = input()
+from parser import *
 
 def getPageIndex(pageName):
     '''
@@ -20,21 +16,32 @@ def getPageIndex(pageName):
     '''
     return abs(mmh3.hash64(pageName)[0])
 
+def savePagesLinks(input, output):
 
-# FORMAT FOR EACH PAGE:
-# $pageName$: set($pagesLinked$)
-pagesDictionary = {}
+    pagesJSON = parseJSON_FROMXML(input)
 
-# TODO with actual JSOM
-for page in pagesJSON:
-    links = parseLinks(page)
-    links = list(map(lambda pageLinked: getPageIndex(pageLinked), links))
-    pagesDictionary[getPageIndex(pageTitle)] = links
+    # FORMAT FOR EACH PAGE:
+    # $pageName$: set($pagesLinked$)
+    pagesDictionary = {}
 
+    # TODO with actual JSOM
+    for page in pagesJSON:
+        pageTitle, links = getTitleFromPage(page), getLinksFromPage(page)
+        links = list(map(lambda pageLinked: getPageIndex(pageLinked), links))
+        pagesDictionary[getPageIndex(pageTitle)] = links
 
+    # Saving data in serialized file.
+    outfile = open(pickledFileName,'wb')
+    pickle.dump(pagesDictionary,outfile)
+    outfile.close()
 
-# Saving data in serialized file.
-outfile = open(pickledFileName,'wb')
-pickle.dump(pagesDictionary,outfile)
-outfile.close()
+# TESTABLE
+if __name__ == '__main__':
+    print('Enter the name of the file from which you want to read the articles:')
+    articlesFile = input()
+    print('Enter the name of the file in which you want to store the links:')
+    pickledFileName = input()
+    
+    savePagesLinks(articlesFile, pickledFileName)
+    
 
