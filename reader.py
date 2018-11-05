@@ -5,7 +5,7 @@ and stores the links between pages in a serialized file.
 '''
 import pickle
 import mmh3
-from parser import *
+from parser import parseJSON_FROMXML, getTitleFromPage, getLinksFromPage
 
 def getPageIndex(pageName):
     '''
@@ -18,7 +18,7 @@ def getPageIndex(pageName):
 
 def savePagesLinks(input, output):
 
-    pagesJSON = parseJSON_FROMXML(input)
+    pagesJSON, _ = parseJSON_FROMXML(input)
 
     # FORMAT FOR EACH PAGE:
     # $pageName$: set($pagesLinked$)

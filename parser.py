@@ -19,7 +19,7 @@ def getLinksFromPage(page):
 
 def getTitleFromPage(page):
     '''
-    For a page returns the titel (Best to handle the format from here)
+    For a page returns the title (Best to handle the format from here)
     '''
     return page['title']
 
@@ -38,15 +38,17 @@ def parseJSON_FROMXML(fileName):
         return 'Please enter the name of an existing file'
 
     # Pages List
-    d = []
+    pageLinks = []
+    pageRedirect = []
 
     for page in jsonPage:
         save_page=dict()
 
         # Pages that are deprecated and don't contain any content.
         if 'redirect' in page.keys():
-            save_page['title'] = page['redirect']['title']
-            save_page['links']= []
+            save_page['title'] = page['title']
+            save_page['redirect_to'] = page['redirect']['title']
+            pageRedirect.append(save_page)
         else:
             save_page['title'] = page['title']
             page_revision = page['revision']
@@ -54,11 +56,9 @@ def parseJSON_FROMXML(fileName):
             matches = [match for match in matches if match[:5] != 'File:']
             links = [onematch for match in matches for onematch in match.split('|')]
             save_page['links'] = sorted(list(set(links)))
-        d.append(save_page)
+            pageLinks.append(save_page)
 
-    nonEmptyD = list(filter(lambda page: len(page['links']) > 0, d))
-
-    return nonEmptyD
+    return pageLinks, pageRedirect
 
 # TESTABLE 
 if __name__ == '__main__':
