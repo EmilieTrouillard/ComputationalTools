@@ -1,6 +1,8 @@
 # coding=utf8
 import json
 import re
+import mmh3
+
 '''
 GOAL: Get all links to other wikipedia pages from the json file of a single page.
 '''
@@ -10,6 +12,15 @@ GOAL: Get all links to other wikipedia pages from the json file of a single page
 
 WIKILINK_REGEX = r'\[\[([\| \w+]*)\]\]'
 rgx = re.compile(WIKILINK_REGEX)
+
+def getPageIndex(pageName):
+    '''
+    Creates an Index from page name, thanks to a hash function
+    We need to hash on a big enough space, to avoid collisions.
+    32 bits: 2••32 = 4 294 967 296 = 429 * 10 000 000 the nbr of articles,
+    64 bits: 2••64 >> 10 000 000, seems safer
+    '''
+    return abs(mmh3.hash64(pageName)[0])
 
 def getLinksFromPage(page):
     '''
@@ -38,25 +49,24 @@ def parseJSON_FROMXML(fileName):
         return 'Please enter the name of an existing file'
 
     # Pages List
-    pageLinks = []
-    pageRedirect = []
+    pageLinks = dict()
+    pageRedirect = dict()
 
     for page in jsonPage:
-        save_page=dict()
+        #save_page=dict()
 
         # Pages that are deprecated and don't contain any content.
         if 'redirect' in page.keys():
-            save_page['title'] = page['title']
-            save_page['redirect_to'] = page['redirect']['title']
-            pageRedirect.append(save_page)
+            pageRedirect[getPageIndex(page['title'])] = getPageIndex(page['redirect']['title'])
+            #pageRedirect.append(save_page)
         else:
-            save_page['title'] = page['title']
             page_revision = page['revision']
             matches = rgx.findall(page_revision['text'])
             matches = [match for match in matches if match[:5] != 'File:']
-            links = [onematch for match in matches for onematch in match.split('|')]
-            save_page['links'] = sorted(list(set(links)))
-            pageLinks.append(save_page)
+            links = [getPageIndex(onematch) for match in matches for onematch in match.split('|')]
+            
+            pageLinks[getPageIndex(page['title'])] = list(set(links))
+            #pageLinks.append(save_page)
 
     return pageLinks, pageRedirect
 
