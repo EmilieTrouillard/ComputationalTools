@@ -9,14 +9,7 @@ import os
 from collections import defaultdict
 from parser import parseJSON_FROMXML, getTitleFromPage, getLinksFromPage
 
-def getPageIndex(pageName):
-    '''
-    Creates an Index from page name, thanks to a hash function
-    We need to hash on a big enough space, to avoid collisions.
-    32 bits: 2••32 = 4 294 967 296 = 429 * 10 000 000 the nbr of articles,
-    64 bits: 2••64 >> 10 000 000, seems safer
-    '''
-    return abs(mmh3.hash64(pageName)[0])
+
 
 def mergePagesDictionary(dict1, dict2):
     newDic = defaultdict(list, dict1)
