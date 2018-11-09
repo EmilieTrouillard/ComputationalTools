@@ -51,7 +51,7 @@ def parseJSON_FROMXML(fileName):
     # Pages List
     pageLinks = dict()
     pageRedirect = dict()
-
+    pageTitles = dict()
     for page in jsonPage:
         #save_page=dict()
 
@@ -67,8 +67,8 @@ def parseJSON_FROMXML(fileName):
             
             pageLinks[getPageIndex(page['title'])] = list(set(links))
             #pageLinks.append(save_page)
-
-    return pageLinks, pageRedirect
+        pageTitles[getPageIndex(page['title'])] = page['title']
+    return pageLinks, pageRedirect, pageTitles
 
 # TESTABLE 
 if __name__ == '__main__':
