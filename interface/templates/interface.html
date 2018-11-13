@@ -1,0 +1,34 @@
+<!doctype html>
+<title>WIKILINKS</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
+<body>
+    <h1>
+        WIKILINKS
+    </h1>
+    <h3>
+        Find the shortest paths of links between two wikipedia articles
+    </h3>
+
+    <form class="wikilinks-form">
+        <p class="wikilinks-note">Note: The title you need to input must come from the url (ex: https://en.wikipedia.org/wiki/Imleria_badia -> Imleria_badia)</p>
+        <div class="wikilinks-form-input">
+            <div class="wikilinks-form-input-first">
+                First Page:
+                <input type="text" name="firstpage" value="{{ firstpage }}">
+            </div>
+            <div class="wikilinks-form-input-second">
+                Second Page:
+                <input type="text" name="secondpage" value="{{ secondpage }}">
+            </div>
+            <div class="wikilinks-form-input-submit">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </form>
+    <div class="wikilinks-result">
+        {% if path%}
+            {{ path }}
+        {% endif %}
+    </div>
+</body>

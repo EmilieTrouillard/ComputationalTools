@@ -1,0 +1,38 @@
+body {
+    background: #eee;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    text-align: center;
+}
+
+h1 {
+    color: #377ba8;
+}
+
+.wikilinks-form {
+
+}
+
+.wikilinks-form-inputs {
+
+}
+
+.wikilinks-note {
+    font-size: 8px;
+}
+
+.wikilinks-form-input-first, .wikilinks-form-input-second, .wikilinks-form-input-submit {
+    display: inline-block;
+}
+
+.wikilinks-result {
+    width: 40%;
+    margin: 16px auto 0 auto;
+    padding: 8px;
+    background-color: #255474;
+    color: #ffffff;
+    border-radius: 5px;
+
+    -webkit-box-shadow: 10px 9px 59px -8px rgba(0,0,0,0.33);
+    -moz-box-shadow: 10px 9px 59px -8px rgba(0,0,0,0.33);
+    box-shadow: 10px 9px 59px -8px rgba(0,0,0,0.33);
+}
