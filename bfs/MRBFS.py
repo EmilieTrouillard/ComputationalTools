@@ -1,6 +1,7 @@
 import mrjob
 from mrjob.job import MRJob
 from numpy import inf
+import os
 
 class MRBFS(MRJob):
 
@@ -45,10 +46,11 @@ class MRBFS(MRJob):
             N[3] = path
             if N[2]:
                 self.increment_counter("endnode","",1)
+                print(path)
 
         if N[1] < inf:
             self.increment_counter("nFoundNodes","",1)
-        
+
         s = ""
         for i in range(0,len(N[4])):
             s += (N[4][i] + " ")

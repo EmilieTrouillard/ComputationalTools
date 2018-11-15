@@ -2,8 +2,10 @@ import mrjob
 from mrjob.job import MRJob
 from numpy import inf
 
+allpaths = False
 startnode = 0
-endnode = 6
+endnode = 9
+
 
 class MRBFSInit(MRJob):
 
@@ -22,7 +24,7 @@ class MRBFSInit(MRJob):
 
         adjacencylist = x[1:]
 
-        if int(x[0])==endnode:
+        if int(x[0]) == endnode and not allpaths:
             b = True
         else:
             b = False
