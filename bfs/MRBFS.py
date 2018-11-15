@@ -1,39 +1,56 @@
 import mrjob
 from mrjob.job import MRJob
+from numpy import inf
 
 class MRBFS(MRJob):
 
-    # list format: id,dist,False,adjacencylist[]]
+    # list format: id,dist,isEndnode,path,adjacencylist
     def mapper(self,_,list):
 
-        str = list.split(" ")
-        id = int(str[0])
-        dist = int(str[1])
-        found = list[2]
+        s = list.split('"')[3].strip().split(',')
 
-        adjacencylist = [int(j) for j in str[3:]]
+        id = s[0]
+        if s[1] == "inf":
+            dist = inf
+        else:
+            dist = int(s[1])
 
-        yield id, [id,dist,found,adjacencylist]
+        if s[2] == "True":
+            isEndnode = True
+        else:
+            isEndnode = False
+        path = s[3]
+        adjacencylist = s[4].split(" ")
+
+        yield id, [id,dist,isEndnode,path,adjacencylist]
 
         for n in adjacencylist:
-            yield n,dist+1
+            if n != "":
+                yield n,[dist+1,path]
 
-    def reducer(self,id,dist):
+    def reducer(self,id,distandpath):
 
-        dist = list(dist)
-
-        dmin = 1000000000000
+        dmin = inf
         N = None
-        found = False
+        path = None
 
-        for d in dist:
-            if(type(d)==list):
+        for d in distandpath:
+            if len(d) > 2:
                 N = d
-            elif d < dmin:
-                dmin = d
+            elif d[0] < dmin:
+                dmin = d[0]
+                path = d[1] + " " + id
         if dmin < N[1]:
-            found = True
             N[1] = dmin
-        N[2] = found
+            N[3] = path
+            if N[2]:
+                self.increment_counter("endnode","",1)
 
-        yield id, N
+        if N[1] < inf:
+            self.increment_counter("nFoundNodes","",1)
+        
+        s = ""
+        for i in range(0,len(N[4])):
+            s += (N[4][i] + " ")
+
+        yield id, N[0] + "," + str(N[1]) + "," + str(N[2]) + "," + N[3] + "," + s
