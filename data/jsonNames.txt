@@ -175976,5 +175976,3 @@
 175975_wiki_part.json
 175976_wiki_part.json
 175977_wiki_part.json
-175978_wiki_part.json
-175979_wiki_part.json
