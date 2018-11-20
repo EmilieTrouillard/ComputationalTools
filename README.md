@@ -33,4 +33,4 @@ Good Luck!
 
 ### Interface
 
-To start the interface, simply run: ```export FLASK_APP=backInterface.py``` and then ```python -m flask run```. /!\ To do this it is necessary to have flask installed. (See: http://flask.pocoo.org/docs/1.0/installation/)
+To start the interface, simply run: ```export FLASK_APP=backInterface.py``` (```export FLASK_ENV=development``` for dev) and then ```python -m flask run```. /!\ To do this it is necessary to have flask installed. (See: http://flask.pocoo.org/docs/1.0/installation/)
