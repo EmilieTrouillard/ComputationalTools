@@ -1,7 +1,6 @@
 <!doctype html>
 <title>WIKILINKS</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-
 <body>
     <h1>
         WIKILINKS
@@ -26,9 +25,63 @@
             </div>
         </div>
     </form>
-    <div class="wikilinks-result">
-        {% if path%}
-            {{ path }}
+    {% if path %}
+        <div class="wikilinks-result">
+            {% for page in path %}
+                <div class="wikilinks-link-wrapper wikilinks-link-wrapper-success">
+                    <img
+                        class="wikipedia-logo"
+                        src="../static/wikipediaLogo.png"
+                    ></img>
+                    <a
+                        class="wikilinks-link"
+                        href="https://en.wikipedia.org/wiki/{{page}}"
+                    >
+                        {{page}}
+                    </a>
+                </div>
+                {% if loop.last %}
+                {% else %}
+                    <div class="arrow-right"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        {% if firstpage and secondpage %}
+            {% if validpages %}
+                <div class="wikilinks-result">
+                    <p class="wikilinks-no-result">（　ﾟДﾟ） No path was found between the pages!!
+                    </div>
+                </div>
+            {% else %}
+                <div class="wikilinks-result">
+                <p class="wikilinks-no-result">¯\_(ツ)_/¯ The pages you submitted don't exist. Please make sure to submit correct page names.</p>
+                <div class="wikilinks-link-wrapper">
+                    <img
+                        class="wikipedia-logo"
+                        src="../static/wikipediaLogo.png"
+                    ></img>
+                    <a
+                        class="wikilinks-link"
+                        href="https://en.wikipedia.org/wiki/{{firstpage}}"
+                    >
+                        {{firstpage}}
+                    </a>
+                </div>
+                <div class="wikilinks-link-wrapper">
+                    <img
+                        class="wikipedia-logo"
+                        src="../static/wikipediaLogo.png"
+                    ></img>
+                    <a
+                        class="wikilinks-link"
+                        href="https://en.wikipedia.org/wiki/{{secondpage}}"
+                    >
+                        {{secondpage}}
+                    </a>
+                </div>
+            </div>
+            {% endif %}
         {% endif %}
-    </div>
+    {% endif %}
 </body>

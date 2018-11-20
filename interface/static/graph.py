@@ -14,22 +14,44 @@ class GraphWorker:
     def __init__(self):
         self.DB_URI = "bolt://localhost:7687"
         self.AUTH_CREDENTIAL = "neo4j"
-        self.AUTH_PASSWORD = "emilie"
+        self.AUTH_PASSWORD = "WikipediaIsAwesome!"
 
         self.driver = GraphDatabase.driver(self.DB_URI, auth=(self.AUTH_CREDENTIAL, self.AUTH_PASSWORD))
 
+    def printVerifiedNode(self, tx, pageTitle):
+        for record in tx.run("MATCH (b: Page {title: {pageTitle}}) RETURN b", pageTitle=pageTitle):
+            return record
+
+    def verifyNodes(self, start, end):
+        verified = True
+        print('Verifying the nodes', start, end)
+        with self.driver.session() as session:
+            try:
+                startNode = session.read_transaction(self.printVerifiedNode, start)
+                endNode = session.read_transaction(self.printVerifiedNode, end)
+                if (startNode == None or endNode == None):
+                    verified = False
+            except TypeError as e:
+                verified = False
+        return verified
 
     def executeShortestPathQuery(self, tx, start, end):
+        '''
+        Returns only one shortest path!
+        '''
         for record in tx.run(
-            "MATCH (b: Page {title: {start}}), (e: Page {title: {end}}), p = shortestPath((b)-[:LINKS_TO*]->(e)) RETURN p", start=start, end=end):
+            "MATCH (b: Page {title: {start}}), (e: Page {title: {end}}), p = shortestPath((b)-[:LINKS_TO*]->(e)) RETURN b,e,p", start=start, end=end):
             return record['p'] # 'p' is the key to access the path object
 
     def getShortestPath(self, start, end):
-        shortestPath = []
+        shortestPath, validNodes = [], True
         with self.driver.session() as session:
             path = session.read_transaction(self.executeShortestPathQuery, start, end)
-        for node in path.nodes:
-            shortestPath.append(node)
+        try:
+            for node in path.nodes:
+                shortestPath.append(node)
+        except AttributeError:
+            print('No path found')
         return shortestPath
 
 
@@ -40,34 +62,28 @@ class GraphInterpreter:
     '''
 
     def __init__(self):
-        # TO REDO ONCE WE HAVE THE ACTUAL MAPPING
-        # READ FROM SERIALIZED ?
-        self.mapper = {
-            'page1': 1,
-            'page2': 2,
-            'page3': 3,
-            'page4': 4,
-            'page5': 5,
-            'page6': 6,
+        # DB can't handle these characters in the title of the pages
+        self.charmap = {
+            '"': "''",
+            ";": ",",
+            "_": " "
         }
 
-    def translateNameId(self, page):
-        return self.mapper[page]
-
-    def translateIdName(self, id):
-        # TO OPTIMIZE
-        for page, pageId in self.mapper.items():
-            if pageId == id:
-                return page
+    def remapCharactersTitle(self, title):
+        for badChar, goodChar in self.charmap.items():
+            title = title.replace(badChar, goodChar)
+        return title
 
     def interpretNode(self, node):
         return node.__getitem__('title')
 
     def interpretPath(self, path):
+        if len(path) == 0:
+            return None
         outputPath = []
         for node in path:
             outputPath.append(self.interpretNode(node))
-        return '->'.join(outputPath)
+        return outputPath
 
 ## TEST 
 

@@ -8,16 +8,23 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    firstPage, secondPage = request.args.get('firstpage'), request.args.get('secondpage');
+    firstPage, secondPage, validPages, path = request.args.get('firstpage'), request.args.get('secondpage'), True, None
 
-    path = ''
     # GETTING THE SHORTEST PATH:
     if firstPage != None and secondPage != None:
         graphWorker, graphInterpreter = graph.GraphWorker(), graph.GraphInterpreter()
+        firstPage, secondPage = graphInterpreter.remapCharactersTitle(firstPage), graphInterpreter.remapCharactersTitle(secondPage)
         dbPath = graphWorker.getShortestPath(firstPage, secondPage)
+
+        # If no path is found, verify the validity of the nodes
+        if len(dbPath) == 0:
+            validPages = graphWorker.verifyNodes(firstPage, secondPage)
+
+        # Interpret the path
         path = graphInterpreter.interpretPath(dbPath)
+
     if firstPage == None:
         firstPage = ''
     if secondPage == None:
         secondPage = ''
-    return render_template('interface.html', firstpage=firstPage, secondpage=secondPage, path=path)
+    return render_template('interface.html', firstpage=firstPage, secondpage=secondPage, path=path, validpages=validPages)

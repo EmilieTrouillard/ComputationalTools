@@ -8,6 +8,11 @@ h1 {
     color: #377ba8;
 }
 
+.loader {
+    max-width: 24px;
+    max-height: 24px;
+}
+
 .wikilinks-form {
 
 }
@@ -17,7 +22,7 @@ h1 {
 }
 
 .wikilinks-note {
-    font-size: 8px;
+    font-size: 10px;
 }
 
 .wikilinks-form-input-first, .wikilinks-form-input-second, .wikilinks-form-input-submit {
@@ -35,4 +40,41 @@ h1 {
     -webkit-box-shadow: 10px 9px 59px -8px rgba(0,0,0,0.33);
     -moz-box-shadow: 10px 9px 59px -8px rgba(0,0,0,0.33);
     box-shadow: 10px 9px 59px -8px rgba(0,0,0,0.33);
+}
+
+.wikilinks-no-result {
+    font-size: 10px;
+}
+
+
+.wikilinks-link-wrapper {
+    display: inline-block;
+    padding: 8px;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 5px;
+}
+
+.wikilinks-link {
+    color: #000000;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.wikipedia-logo {
+    height: 16px;
+    margin-bottom: -2px;
+}
+
+
+.arrow-right {
+    display: inline-block;
+    width: 0; 
+    height: 0; 
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid #ffffff;
+
+    position: relative;
+    top: 6px;
 }

@@ -1,2 +1,9 @@
 *.json
+*.csv
+# Files without extension.
+*
+!/**/
+!*.*
 
+*.DS_Store
+*.pyc

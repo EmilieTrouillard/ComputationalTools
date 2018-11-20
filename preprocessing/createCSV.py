@@ -21,19 +21,25 @@ def removeSingleQuotes(title):
         return "'".join(title.split('"'))
     else: return title
 
-"""nodes = open('nodesCleanTitles.csv', 'w')
+
+# FILES
+NODES_CSV = 'nodesCleanTitles.csv'
+RELATIONSHIPS_CSV = 'relationships_unique.csv'
+GRAPH = 'preprocessing/graphfile_global_MergedRedirect_NoDuplicate'
+ID_TO_TITLE = 'preprocessing/idtotitlemapNoRedirect'
+
+
+nodes = open(NODES_CSV, 'w')
 nodes.write('pageId:ID(Page);title\n')
 
-pages = readPickled('preprocessing/idtotitlemapNoRedirect')
-#nodes.write('\n'.join([';'.join([str(key), removeSingleQuotes(value)]) for key, value in pages.items()]))
+pages = readPickled(ID_TO_TITLE)
 nodes.write('\n'.join([';'.join([str(key), str(value).replace('"', "''").replace(';', ',')]) for key, value in pages.items()]))
-nodes.close()"""
+nodes.close()
 
-relationships = open('relationships_unique.csv', 'w')
+relationships = open(RELATIONSHIPS_CSV, 'w')
 relationships.write(':START_ID(Page);:END_ID(Page)\n')
-#Relationships = open('relationshipsRest.csv', 'w')
-#Relationships.write('node1node2\n')
-graph = open('preprocessing/graphfile_global_MergedRedirect_NoDuplicate', 'r')
+
+graph = open(GRAPH, 'r')
 out = []
 for line in graph:
     data = line[:-1].split(' ')
@@ -41,10 +47,6 @@ for line in graph:
         origin = data[0]
         data = data[1:]
         out.append('\n'.join([';'.join([origin, target]) for target in data if origin != target]))
-#outsmall = out[:10]
-#outrest = out[10:]
+
 relationships.write('\n'.join(out))
 relationships.close()
-
-#Relationships.write('\n'.join(outrest))
-#Relationships.close()
