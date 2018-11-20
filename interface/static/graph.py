@@ -14,15 +14,14 @@ class GraphWorker:
     def __init__(self):
         self.DB_URI = "bolt://localhost:7687"
         self.AUTH_CREDENTIAL = "neo4j"
-        self.AUTH_PASSWORD = "WikipediaIsAwesome!"
+        self.AUTH_PASSWORD = "emilie"
 
         self.driver = GraphDatabase.driver(self.DB_URI, auth=(self.AUTH_CREDENTIAL, self.AUTH_PASSWORD))
 
 
     def executeShortestPathQuery(self, tx, start, end):
         for record in tx.run(
-            "MATCH (b: Page {pageId: {start}}), (e: Page {pageId: {end}}), p = shortestPath((b)-[:LINKS_TO*]->(e)) "
-            "RETURN p", start=int(start), end=int(end)):
+            "MATCH (b: Page {title: {start}}), (e: Page {title: {end}}), p = shortestPath((b)-[:LINKS_TO*]->(e)) RETURN p", start=start, end=end):
             return record['p'] # 'p' is the key to access the path object
 
     def getShortestPath(self, start, end):
@@ -62,7 +61,7 @@ class GraphInterpreter:
                 return page
 
     def interpretNode(self, node):
-        return self.translateIdName(node.__getitem__('pageId'))
+        return node.__getitem__('title')
 
     def interpretPath(self, path):
         outputPath = []
@@ -74,4 +73,4 @@ class GraphInterpreter:
 
 if __name__ == '__main__':
     worker = GraphWorker()
-    worker.getShortestPath(0, 5)
+    worker.getShortestPath('Apple', 'Denmark')

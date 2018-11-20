@@ -14,8 +14,7 @@ def index():
     # GETTING THE SHORTEST PATH:
     if firstPage != None and secondPage != None:
         graphWorker, graphInterpreter = graph.GraphWorker(), graph.GraphInterpreter()
-        firstPageId, secondPageId = graphInterpreter.translateNameId(firstPage), graphInterpreter.translateNameId(secondPage)
-        dbPath = graphWorker.getShortestPath(firstPageId, secondPageId)
+        dbPath = graphWorker.getShortestPath(firstPage, secondPage)
         path = graphInterpreter.interpretPath(dbPath)
     if firstPage == None:
         firstPage = ''
