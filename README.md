@@ -2,6 +2,10 @@
 
 Computational Tools for Data Science - Project
 
+Wikilinks is a system that lets anyone find the shortest path between two wikipedia articles, only using links
+
+![Wikilinks Interface](wikilinks.jpg)
+
 ## Create your own wikilinks
 
 Learn here how to replicate the wikilinks path finder between two wikipedia articles on a sample (smaller) data set.
