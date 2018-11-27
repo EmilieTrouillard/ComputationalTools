@@ -40,11 +40,40 @@ You can then copy the given csv files to a place where the database can import f
 cp sample/nodes_wikilinks.csv $NEO4J_FOLDER$/import/ && cp sample/relationships_wikilinks.csv $NEO4J_FOLDER$/import/
 ```
 
-The following commands imports the csv files in database. Be careful to replace the ```$DATABASE_NAME$``` by the name of your own neo4j database. If you need help regarding neo4j, see the [neo4j section](#neo4j).
+If you have neo4j already running, stop it.
 ```
-NEO4J-FOLDER$ sudo ./bin/neo4j-admin import --database $DATABASE_NAME$.db --id-type INTEGER --nodes:Page "import/nodes_wikilinks.csv" --relationships:LINKS_TO "import/relationships_wikilinks.csv" --delimiter ";" --array-delimiter "|"
+NEO4J-FOLDER$ ./bin/neo4j stop
 ```
 
+The following commands imports the csv files in database. Make sure that you don't have any databse called ```wikilinks``` If you need help regarding neo4j, see the [neo4j section](#neo4j).
+```
+NEO4J-FOLDER$ ./bin/neo4j-admin import --database wikilinks.db --id-type INTEGER --nodes:Page "import/nodes_wikilinks.csv" --relationships:LINKS_TO "import/relationships_wikilinks.csv" --delimiter ";" --array-delimiter "|"
+```
+
+It is now necessary to update the default database for _neo4j_. Modify the config file
+```
+NEO4J-FOLDER$ nano conf/neo4j.conf
+```
+
+and then update the active database field with the database. 
+```
+dbms.active_database=wikilinks.db
+```
+
+Now verify that the database runs smoothly
+```
+NEO4J-FOLDER$ ./bin/neo4j console
+```
+
+If the database starts, you can now stop it 
+```
+NEO4J-FOLDER$ ./bin/neo4j stop
+```
+
+and boot it again as a daemon.
+```
+NEO4J-FOLDER$ ./bin/neo4j start
+```
 
 Now that the database is functional, let's install all dependencies needed for the interface. It runs on [Flask](http://flask.pocoo.org/docs/1.0/quickstart/), a really lightweight python framework for web-development. 
 
@@ -58,6 +87,8 @@ ComputationalTools$ cd interface
 ComputationalTools$ export FLASK_APP=backInterface.py
 ComputationalTools$ python -m flask run
 ```
+
+Go to ```http://localhost:5000/``` and you can now experiment around! Be advised not articles exist on this sample set. Ex of a query: Anthropology & Anarchism.
 
 
 **/!\ NOTE**:
