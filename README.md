@@ -36,7 +36,7 @@ You can then copy the given csv files to a place where the database can import f
 cp sample/nodes_wikilinks.csv $NEO4J_FOLDER$/import/ && cp sample/relationships_wikilinks.csv $NEO4J_FOLDER$/import/
 ```
 
-The following commands imports the csv files in database. Be careful to replace the ```$DATABASE_NAME$``` by the name of your own neo4j database. If you need help regarding neo4j, see the [neo4j section](neo4j).
+The following commands imports the csv files in database. Be careful to replace the ```$DATABASE_NAME$``` by the name of your own neo4j database. If you need help regarding neo4j, see the [neo4j section](#neo4j).
 ```
 NEO4J-FOLDER$ sudo ./bin/neo4j-admin import --database $DATABASE_NAME$.db --id-type INTEGER --nodes:Page "import/nodes_wikilinks.csv" --relationships:LINKS_TO "import/relationships_wikilinks.csv" --delimiter ";" --array-delimiter "|"
 ```
@@ -56,7 +56,7 @@ ComputationalTools$ python -m flask run
 ```
 
 
-*/!\ NOTE*:
+**/!\ NOTE**:
 There is no reason why would anyone's database config would be the same as ours. We created a db config file for one to change the credentials of the database in 
 ```
 ComputationalTools/graphdb/dbconfig.py
@@ -103,7 +103,7 @@ To start the interface, simply run: ```export FLASK_APP=backInterface.py``` (```
 
 See [installation](https://neo4j.com/docs/operations-manual/current/installation/).
 
-*Changing Database* 
+**Changing Database**
 
 edit the neo4j conf file. (See [File Locations](https://neo4j.com/docs/operations-manual/current/configuration/file-locations/)) to know where it is located. (Ex given on Debian)
 ```
@@ -119,9 +119,9 @@ dbms.active_database=wikilinks.db
 
 and restart the database.
 
-*Changing Password*
+**Changing Password**
 
 At the start, the password of any database will be _neo4j_. See [here](https://neo4j.com/docs/operations-manual/current/configuration/set-initial-password/) to set a password.
 
-*Start from shell*
+**Start from shell**
 Make sure the database runs. To boot it from shell, type in ```sh ./bin/neo4j start``` from the neo4j folder.
