@@ -5,24 +5,22 @@ Created on Tue Nov  6 16:18:06 2018
 
 @author: ubuntu
 """
-
+import os
 from mrjob.job import MRJob
 from parserNoHash import parseREDIRECT_FROMXML
 import pickle
 
-fileName = '../data/jsonNames.txt'
-#fileName = '../jsonNames1.txt'
-
+HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
+INPUT_FILE = HOME_DIR + '/sample/jsonNames.txt'
+REDIRECT_DICT_FILENAME = HOME_DIR + '/sample/RedirectDict'
 
 class aggregateIndex(MRJob):
 
     def mapper(self, _, line):
 
-        #print("line = " + line)
-        fileName = '/media/ubuntu/1TO/DTU/courses/ComputationalToolsForDataScience/ComputationalTools/parsed/' + line
-        #fileName = "C:/Users/Finn/Dropbox/02807/project/computationaltools/" + line
+        INPUT_FILE = HOME_DIR + '/data/' + line
 
-        parsed_titles = parseREDIRECT_FROMXML(fileName)
+        parsed_titles = parseREDIRECT_FROMXML(INPUT_FILE)
 
         yield 0, parsed_titles
 
@@ -33,35 +31,12 @@ class aggregateIndex(MRJob):
         
         yield None, D
         
-#print(fileName)
-mr_job = aggregateIndex(args=[fileName])
+mr_job = aggregateIndex(args=[INPUT_FILE])
 with mr_job.make_runner() as runner:
     runner.run()
-    with open('RedirectDict','wb') as f:
+    with open(REDIRECT_DICT_FILENAME,'wb') as f:
 
         for _,value in mr_job.parse_output(runner.cat_output()):
             print('Writing output file...')
             pickle.dump(value, f)
         f.close()
-#            for title in value[1]:
-#                f2.write(title + " " + str(value[1][title]))
-#            for id in value[2]:
-#                f3.write(id + " " + value[2][id])
-
-
-            #for line in runner.util.to_lines(runner.cat_output()):
-        #key, value = mr_job.parse_output(line)
-
-
-        #outfile = open('graphfile','wb')
-        #pickle.dump(value[0],outfile)
-        #outfile.close()
-        #outfile = open('titletoidmap','wb')
-        #pickle.dump(value[1],outfile)
-        #outfile.close()
-        #outfile = open('idtotitlemap','wb')
-        #pickle.dump(value[2],outfile)
-        #dictWithIntKeys = {int(k): links for k, links in value.items()}
-        #outfile = open('MapReduceAll','wb')
-        #pickle.dump(dictWithIntKeys, outfile)
-        #outfile.close()

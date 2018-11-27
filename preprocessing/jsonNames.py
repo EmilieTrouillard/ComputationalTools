@@ -3,7 +3,7 @@
 """
 Created on Tue Nov  6 16:21:47 2018
 
-@author: ubuntu
+CREATES JSONNAMES.txt file to say to the preprocessor what files to consider
 """
 
 file = open('jsonNames.txt', 'w') 

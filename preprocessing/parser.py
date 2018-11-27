@@ -53,12 +53,9 @@ def parseJSON_FROMXML(fileName):
     pageRedirect = dict()
     pageTitles = dict()
     for page in jsonPage:
-        #save_page=dict()
-
         # Pages that are deprecated and don't contain any content.
         if 'redirect' in page.keys():
             pageRedirect[getPageIndex(page['title'])] = getPageIndex(page['redirect']['title'])
-            #pageRedirect.append(save_page)
         else:
             page_revision = page['revision']
             matches = rgx.findall(page_revision['text'])
@@ -66,7 +63,6 @@ def parseJSON_FROMXML(fileName):
             links = [getPageIndex(onematch) for match in matches for onematch in match.split('|')]
             
             pageLinks[getPageIndex(page['title'])] = list(set(links))
-            #pageLinks.append(save_page)
         pageTitles[getPageIndex(page['title'])] = page['title']
     return pageLinks, pageRedirect, pageTitles
 

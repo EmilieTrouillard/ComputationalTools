@@ -3,7 +3,11 @@ File that handles the wikipedia's graph.
 Most notably, access the graph db for querying the shortest path
 '''
 from neo4j.v1 import GraphDatabase
-
+import sys
+import os
+HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-2])
+sys.path.append(HOME_DIR)
+from graphdb.dbconfig import AUTH_CREDENTIAL, AUTH_PASSWORD
 
 class GraphWorker:
     '''
@@ -11,10 +15,10 @@ class GraphWorker:
     See https://neo4j.com/docs/api/python-driver/current/_modules/neo4j/v1/types/graph.html#Path
     '''
 
-    def __init__(self):
+    def __init__(self, authCredential=AUTH_CREDENTIAL, authPassword=AUTH_PASSWORD):
         self.DB_URI = "bolt://localhost:7687"
-        self.AUTH_CREDENTIAL = "neo4j"
-        self.AUTH_PASSWORD = "WikipediaIsAwesome!"
+        self.AUTH_CREDENTIAL = authCredential
+        self.AUTH_PASSWORD = authPassword
 
         self.driver = GraphDatabase.driver(self.DB_URI, auth=(self.AUTH_CREDENTIAL, self.AUTH_PASSWORD))
 

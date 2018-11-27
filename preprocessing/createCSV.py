@@ -1,45 +1,41 @@
 import pickle
 import os
+from readGraph import readPickled
 
-
-def readPickled(fileName):
-    pickledData = {}
-    try:
-        if os.path.getsize(fileName) > 0:      
-            with open(fileName, "rb") as f:
-                unpickler = pickle.Unpickler(f)
-                # if file is not empty scores will be equal
-                # to the value unpickled
-                pickledData = unpickler.load()
-    except FileNotFoundError:
-        pass
-    return pickledData
+### =================
+### HELPERS
+### =================
 
 def removeSingleQuotes(title):
+    '''
+    Single Quotes cannot be used for data in the neo4j database.
+    '''
     L = title.split('"')
     if len(L)>0 and len(L)%2 ==0:
         return "'".join(title.split('"'))
     else: return title
 
+### =================
+from indexcreation_mapReduce import ID_TO_TITLE_FILENAME
+from graphcreation_mapReduce import GRAPH_FILENAME
 
 # FILES
-NODES_CSV = 'nodesCleanTitles.csv'
-RELATIONSHIPS_CSV = 'relationships_unique.csv'
-GRAPH = 'preprocessing/graphfile_global_MergedRedirect_NoDuplicate'
-ID_TO_TITLE = 'preprocessing/idtotitlemapNoRedirect'
+HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
+NODES_CSV_FILENAME = HOME_DIR + '/sample/nodes_wikilinks.csv'
+RELATIONSHIPS_CSV_FILENAME = HOME_DIR + '/sample/relationships_wikilinks.csv'
 
 
-nodes = open(NODES_CSV, 'w')
+nodes = open(NODES_CSV_FILENAME, 'w')
 nodes.write('pageId:ID(Page);title\n')
 
-pages = readPickled(ID_TO_TITLE)
+pages = readPickled(ID_TO_TITLE_FILENAME)
 nodes.write('\n'.join([';'.join([str(key), str(value).replace('"', "''").replace(';', ',')]) for key, value in pages.items()]))
 nodes.close()
 
-relationships = open(RELATIONSHIPS_CSV, 'w')
+relationships = open(RELATIONSHIPS_CSV_FILENAME, 'w')
 relationships.write(':START_ID(Page);:END_ID(Page)\n')
 
-graph = open(GRAPH, 'r')
+graph = open(GRAPH_FILENAME, 'r')
 out = []
 for line in graph:
     data = line[:-1].split(' ')

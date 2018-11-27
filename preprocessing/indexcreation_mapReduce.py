@@ -5,24 +5,23 @@ Created on Tue Nov  6 16:18:06 2018
 
 @author: ubuntu
 """
-
 from mrjob.job import MRJob
 from parserNoHash import parseTITLES_FROMXML
+import os
 import pickle
 
-fileName = '../data/jsonNames.txt'
-#fileName = '../jsonNames1.txt'
-
+HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
+INPUT_FILE = HOME_DIR + '/sample/jsonNames.txt'
+TITLE_TO_ID_FILENAME = HOME_DIR + '/sample/title_to_id_mapNoRedirect'
+ID_TO_TITLE_FILENAME = HOME_DIR + '/sample/id_to_title_mapNoRedirect'
 
 class aggregateIndex(MRJob):
 
     def mapper(self, _, line):
 
-        #print("line = " + line)
-        fileName = '/media/ubuntu/1TO/DTU/courses/ComputationalToolsForDataScience/ComputationalTools/parsed/' + line
-        #fileName = "C:/Users/Finn/Dropbox/02807/project/computationaltools/" + line
+        INPUT_FILE =  HOME_DIR + '/data/' + line
 
-        parsed_titles = parseTITLES_FROMXML(fileName)
+        parsed_titles = parseTITLES_FROMXML(INPUT_FILE)
 
         yield 0, list(parsed_titles)
 
@@ -44,11 +43,10 @@ class aggregateIndex(MRJob):
         
         yield None, [titleToIdMap, idToTitleMap]
 
-#print(fileName)
-mr_job = aggregateIndex(args=[fileName])
+mr_job = aggregateIndex(args=[INPUT_FILE])
 with mr_job.make_runner() as runner:
     runner.run()
-    with open('titletoidmapNoRedirect','wb') as ft,  open('idtotitlemapNoRedirect','wb') as fi:
+    with open(TITLE_TO_ID_FILENAME,'wb') as ft,  open(ID_TO_TITLE_FILENAME,'wb') as fi:
 
         for _,value in mr_job.parse_output(runner.cat_output()):
             print('Writing output files...')
@@ -56,25 +54,3 @@ with mr_job.make_runner() as runner:
             pickle.dump(value[1], fi)
         ft.close()
         fi.close()
-#            for title in value[1]:
-#                f2.write(title + " " + str(value[1][title]))
-#            for id in value[2]:
-#                f3.write(id + " " + value[2][id])
-
-
-            #for line in runner.util.to_lines(runner.cat_output()):
-        #key, value = mr_job.parse_output(line)
-
-
-        #outfile = open('graphfile','wb')
-        #pickle.dump(value[0],outfile)
-        #outfile.close()
-        #outfile = open('titletoidmap','wb')
-        #pickle.dump(value[1],outfile)
-        #outfile.close()
-        #outfile = open('idtotitlemap','wb')
-        #pickle.dump(value[2],outfile)
-        #dictWithIntKeys = {int(k): links for k, links in value.items()}
-        #outfile = open('MapReduceAll','wb')
-        #pickle.dump(dictWithIntKeys, outfile)
-        #outfile.close()
