@@ -42,6 +42,11 @@ h1 {
     box-shadow: 10px 9px 59px -8px rgba(0,0,0,0.33);
 }
 
+.wikilinks-no-result-n {
+    font-size: 10px;
+    padding-bottom: 16px
+}
+
 .wikilinks-no-result {
     font-size: 10px;
 }

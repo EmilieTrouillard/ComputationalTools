@@ -99,7 +99,29 @@ ComputationalTools/graphdb/dbconfig.py
 
 #### BFS:
 
-TODO
+Getting the shortest path between two articles using standard bfs relies on the ```bfs/BFS.py``` script.
+
+**TODO**
+
+
+```
+ComputationalTools$ python bfs/BFS.py $inputFile$
+```
+With the sample graph file being present in ```sample/graphfile_global_MergedRedirect_NoDuplicate```, and recommended node, **0**. You can run
+```
+ComputationalTools$ python bfs/BFS.py -h
+```
+to learn more about the options. (To specify an end node for example).
+
+For the implementation of the shortest path using map reduce bfs:
+```
+ComputationalTools$ python bfs/MRBFS_main.py 
+```
+
+Here again, if more details about the arguments and possible options, run:
+```
+omputationalTools$ python bfs/MRBFS_main.py -h
+```
 
 ## Project Architecture
 
