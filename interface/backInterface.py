@@ -28,3 +28,6 @@ def index():
     if secondPage == None:
         secondPage = ''
     return render_template('interface.html', firstpage=firstPage, secondpage=secondPage, path=path, validpages=validPages)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080)
