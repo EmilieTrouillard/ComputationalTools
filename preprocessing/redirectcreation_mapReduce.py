@@ -9,8 +9,9 @@ import os
 from mrjob.job import MRJob
 from parserNoHash import parseREDIRECT_FROMXML
 import pickle
+from utilities import HOME_DIR
+import argparse
 
-HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
 INPUT_FILE = HOME_DIR + '/sample/jsonNames.txt'
 REDIRECT_DICT_FILENAME = HOME_DIR + '/sample/RedirectDict'
 
@@ -30,6 +31,16 @@ class aggregateIndex(MRJob):
         D = {k: link for d in values for k, link in d.items()}
         
         yield None, D
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input_file", help="Name of file in which the name of the raw data files to consider are stored. DEFAULT '/sample/jsonNames.txt'", type=str)
+parser.add_argument("-o", "--output_file", help="Name of the output redirect file. DEFAULT '/sample/RedirectDict'", type=str)
+args = parser.parse_args()
+
+if args.input_file != None:
+    INPUT_FILE = HOME_DIR + args.input_file
+if args.output_file != None:
+    REDIRECT_DICT_FILENAME = HOME_DIR + args.output_file
         
 mr_job = aggregateIndex(args=[INPUT_FILE])
 with mr_job.make_runner() as runner:

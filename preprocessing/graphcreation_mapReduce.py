@@ -9,12 +9,37 @@ import os
 from mrjob.job import MRJob
 from parserNoHash import parseJSON_FROMXML
 from readGraph import readPickled
-from indexcreation_mapReduce import TITLE_TO_ID_FILENAME, ID_TO_TITLE_FILENAME
+import argparse
+from utilities import HOME_DIR
+import copy
 
-HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
 INPUT_FILE = HOME_DIR + '/sample/jsonNames.txt'
+DATA_DIR = '/data/'
 GRAPH_FILENAME = HOME_DIR + '/sample/graphfile_global_MergedRedirect_NoDuplicate'
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input_file", help="Name of file in which the name of the raw data files to consider are stored. DEFAULT '/sample/jsonNames.txt'", type=str)
+parser.add_argument("-o", "--output_file", help="Name of the output graph file. DEFAULT '/sample/graphfile_global_MergedRedirect_NoDuplicate'", type=str)
+parser.add_argument("-d", "--data_dir", help="Name of the directory in which the raw data is stored (json Files). DEFAULT '/data/'", type=str)
+parser.add_argument("-ti", "--title_to_id_filename", help="Name of the title to id file.", type=str)
+parser.add_argument("-it", "--id_to_title_filename", help="Name of the id to title file.", type=str)
+args = parser.parse_args()
+
+from indexcreation_mapReduce import TITLE_TO_ID_FILENAME, ID_TO_TITLE_FILENAME
+TITLE_TO_ID_FILENAME_L = TITLE_TO_ID_FILENAME
+ID_TO_TITLE_FILENAME_L = ID_TO_TITLE_FILENAME
+
+if args.input_file != None:
+    INPUT_FILE = HOME_DIR + args.input_file
+if args.output_file != None:
+    GRAPH_FILENAME = HOME_DIR + args.output_file
+if args.data_dir != None:
+    DATA_DIR = HOME_DIR + args.data_dir
+if args.title_to_id_filename != None:
+    TITLE_TO_ID_FILENAME_L = HOME_DIR + args.title_to_id_filename
+if args.id_to_title_filename != None:
+    ID_TO_TITLE_FILENAME_L =  HOME_DIR + args.id_to_title_filename
 
 # LOADING THE MAPPING ID TITLE
 idtotitle = readPickled(TITLE_TO_ID_FILENAME)
@@ -27,7 +52,7 @@ class aggregateGraph(MRJob):
         
     def mapper(self, _, line):
 
-        INPUT_FILE = HOME_DIR + '/data/' + line
+        INPUT_FILE = HOME_DIR + DATA_DIR + line
         
         parsed_dictionnaries = parseJSON_FROMXML(INPUT_FILE, idtotitle, redirects)
 
@@ -40,6 +65,7 @@ class aggregateGraph(MRJob):
         graph = [[key] + links for cluster in pageClusters for key, links in cluster.items()]
 
         yield None, graph
+
 
 mr_job = aggregateGraph(args=[INPUT_FILE])
 with mr_job.make_runner() as runner:

@@ -2,9 +2,12 @@
 IMPLEMENTATION OF SHORTEST PATH THROUGH MAP REDUCE
 INPUT:
 * Graph input file: It should consist of lines of the form: <node_id> <neighbor_id1,neighbor_id2,...,neighbor_idk>
-* Output dir: The user specifies where the output should be in OUTPUT_DIR_PARENT. The program will create the directory OUTPUT_DIR_PARENT/output,
+* (OPT) Output dir: The user specifies where the output should be in OUTPUT_DIR_PARENT. The program will create the directory OUTPUT_DIR_PARENT/output,
     which should contain the output files after termination.
     During execution, the program will create the directory OUTPUT_DIR_PARENT/MRBFSTemp, where temporary files will be placed during execution.
+
+RUN MRBFS_main.py -h to learn more about arguments and options
+
 OUTPUT:
 * The output has the form: "id" "id,distance,hasSent,isEndnode,path,adjacencylist"
 ---
@@ -23,9 +26,8 @@ import sys
 import shutil
 import os
 import argparse
+from utilities import HOME_DIR
 
-
-HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
 OUTPUT_DIR_PARENT = HOME_DIR + '/sample'
 OUTPUT_DIR = '/outputMRBFS'
 TEMP_DIR_NAME = "/MRBFSTemp"
@@ -38,25 +40,25 @@ if __name__ == "__main__":
 
     ## HANDLE ARGUMENTS
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_file", help="Graph input file")
-    parser.add_argument("-s", "--startnode", help="ID of the starting node", type=int)
-    parser.add_argument("-e", "--endnode", help="ID of the end node", type=int)
+    parser.add_argument("input_file", help="Graph input file. FORMAT: Node NeighborNode1 NeighborNode2 ...")
+    parser.add_argument("-s", "--startnode", help="ID of the starting node (As seen in the graph input file)", type=int)
+    parser.add_argument("-e", "--endnode", help="ID of the end node (As seen in the graph input file)", type=int)
     parser.add_argument("-a", "--allpaths", help="Specify if it should find path to all nodes. (0 for NO, 1 for YES) DEFAULT:YES", type=int, choices=[0, 1])
-    parser.add_argument("-o", "--output_dir", help="Directory to store output in")
-    parser.add_argument("-op", "--output_dir_parent", help="Parent directory to store output in")
+    parser.add_argument("-o", "--output_dir", help="Name of the directory to store output in.")
+    parser.add_argument("-op", "--output_dir_parent", help="Parent directory to store output in. Ex: .../ComputationalTools/sample")
     args = parser.parse_args()
 
     input_file = args.input_file
 
-    if args.startnode:
+    if args.startnode != None:
         changeStartNode(args.startnode)
-    if args.endnode:
+    if args.endnode != None:
         changeEndNode(args.endnode)
     if (args.allpaths == 0 or args.allpaths == 1):
         changeAllPaths(bool(args.allpaths))
-    if args.output_dir_parent:
+    if args.output_dir_parent != None:
         OUTPUT_DIR_PARENT = args.output_dir_parent
-    if args.output_dir:
+    if args.output_dir != None:
         OUTPUT_DIR = args.output_dir
 
     if os.path.exists(nodeinfo_dir[:-2]):
@@ -100,3 +102,5 @@ if __name__ == "__main__":
     with mr_job.make_runner() as runner:
         runner.run()
         shutil.rmtree(OUTPUT_DIR_PARENT + TEMP_DIR_NAME)
+
+    print('All done! Go see {0} for the output'.format(OUTPUT_DIR_PARENT + OUTPUT_DIR))

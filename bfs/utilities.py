@@ -4,6 +4,8 @@ UTILITIES FOR BFS
 import pickle
 import os
 
+HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).replace('\\','/').split('/')[:-1])
+
 def readPickled(fileName):
     pickledData = {}
     try:

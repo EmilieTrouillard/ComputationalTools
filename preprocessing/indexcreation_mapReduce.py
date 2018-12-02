@@ -9,8 +9,11 @@ from mrjob.job import MRJob
 from parserNoHash import parseTITLES_FROMXML
 import os
 import pickle
+import platform
+from utilities import HOME_DIR
+import argparse
 
-HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
+
 INPUT_FILE = HOME_DIR + '/sample/jsonNames.txt'
 TITLE_TO_ID_FILENAME = HOME_DIR + '/sample/title_to_id_mapNoRedirect'
 ID_TO_TITLE_FILENAME = HOME_DIR + '/sample/id_to_title_mapNoRedirect'
@@ -42,6 +45,19 @@ class aggregateIndex(MRJob):
                     print(counter)
         
         yield None, [titleToIdMap, idToTitleMap]
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input_file", help="Name of file in which the name of the raw data files to consider are stored. DEFAULT '/sample/jsonNames.txt'", type=str)
+parser.add_argument("-ti", "--title_to_id_filename", help="Name of the output title to id file. DEFAULT '/sample/title_to_id_mapNoRedirect'", type=str)
+parser.add_argument("-it", "--id_to_title_filename", help="Name of the output id to title file. DEFAULT '/sample/id_to_title_mapNoRedirect'", type=str)
+args = parser.parse_args()
+
+if args.input_file != None:
+    INPUT_FILE = HOME_DIR + args.input_file
+if args.title_to_id_filename != None:
+    TITLE_TO_ID_FILENAME = HOME_DIR + args.title_to_id_filename
+if args.id_to_title_filename != None:
+    ID_TO_TITLE_FILENAME = HOME_DIR + args.id_to_title_filename
 
 mr_job = aggregateIndex(args=[INPUT_FILE])
 with mr_job.make_runner() as runner:

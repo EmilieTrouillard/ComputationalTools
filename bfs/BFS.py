@@ -4,6 +4,9 @@ INPUT:
 * Graph Input file: The input file should consist of lines of the form: <node_id> <neighbor_id1,neighbor_id2,...,neighbor_idk>. The ID's should be 0,1,...,n-1.
 * Start Node : ID of the start nodeself.
 * (OPT) End Node : ID of the end node. If this is not provided, the program finds the paths to all the nodes.
+
+RUN BFS.py -h to learn more about the arguments and options
+
 OUTPUT:
 ---
 '''
@@ -128,11 +131,11 @@ def initializenodes(input_file):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_file", help="Graph input file")
-    parser.add_argument("-si", "--startnode_id", help="ID of the start node", type=int)
-    parser.add_argument("-ei", "--endnode_id", help="ID of the end node", type=int)
-    parser.add_argument("-sn", "--startnode_name", help="Name of the start article")
-    parser.add_argument("-en", "--endnode_name", help="Name of the end node")
+    parser.add_argument("input_file", help="Graph input file. FORMAT: Node NeighborNode1 NeighborNode2 ...")
+    parser.add_argument("-si", "--startnode_id", help="ID of the start node (As seen in the graph input file). REQUIRED if startnode name is not given", type=int)
+    parser.add_argument("-ei", "--endnode_id", help="ID of the end node (As seen in the graph input file). If not given, will compute the shortest path to all nodes.", type=int)
+    parser.add_argument("-sn", "--startnode_name", help="Name of the start article. If a mapping title to id is given (ti), replaces the startnode id option.")
+    parser.add_argument("-en", "--endnode_name", help="Name of the end node. As for the start node, a mapping title to id (ti) is required.")
     parser.add_argument("-ti", "--titles_to_ids", help="Option to allow to input the article titles instead of their ids. Must be the file name that contains the dictionary title to id")
     parser.add_argument("-it", "--ids_to_titles", help="Option to allow to output the article titles instead of their ids. Must be the file name that contains the dictionary id to title")
     args = parser.parse_args()
@@ -140,7 +143,7 @@ if __name__ == "__main__":
     input_file = args.input_file
 
     # CHECK ON INPUT NODES VALIDITY
-    if not args.startnode_id and not args.startnode_name:
+    if not (args.startnode_id == None or args.startnode_name == None):
         sys.exit('You need to specify a start node! Run python bfs/BFS.py -h for help.')
     if args.startnode_name and not args.titles_to_ids:
         sys.exit('If you want to input the start node with its article title you need to provide a title to id file! Run python bfs/BFS.py -h for help.')
@@ -149,32 +152,32 @@ if __name__ == "__main__":
 
     # INPUT ARE IDS
     startnode_id, endnode_id = None, None
-    if args.startnode_id:
+    if args.startnode_id != None:
         startnode_id = args.startnode_id
-    if args.endnode_id:
+    if args.endnode_id != None:
         endnode_id = args.endnode_id
 
     # INPUT ARE NAMES
     titleToId = None
-    if args.titles_to_ids:
+    if args.titles_to_ids != None:
         titleToId = readPickled(args.titles_to_ids)
-    startnode_id = int(titleToId[args.startnode_name])
-
-    if args.startnode_name:
         startnode_id = int(titleToId[args.startnode_name])
-    if args.endnode_name:
+
+    if args.startnode_name != None:
+        startnode_id = int(titleToId[args.startnode_name])
+    if args.endnode_name != None:
         endnode_id = int(titleToId[args.endnode_name])
 
     # ID TO TITLE
     idToTitle = None
-    if args.ids_to_titles:
+    if args.ids_to_titles != None:
         idToTitle = readPickled(args.ids_to_titles)
 
 
     nodes = initializenodes(input_file)
     bfs = BFS(nodes)
 
-    if endnode_id:
+    if endnode_id != None:
         d,dist,path = bfs.shortestpath(nodes[startnode_id], nodes[endnode_id])
         if idToTitle != None:
             pathTitles = [idToTitle[str(idPath)] for idPath in path[0]]

@@ -182,3 +182,11 @@ At the start, the password of any database will be _neo4j_. See [here](https://n
 
 **Start from shell**
 Make sure the database runs. To boot it from shell, type in ```sh ./bin/neo4j start``` from the neo4j folder.
+
+## DEV OPS
+
+[link for the server configuration](https://vladikk.com/2013/09/12/serving-flask-with-nginx-on-ubuntu/)
+
+On server:
+
+```sudo neo4j-admin import --database wikilinks.db --id-type INTEGER --nodes:Page "/var/lib/neo4j/import/nodesCleanTitles.csv" --relationships:LINKS_TO "/var/lib/neo4j/import/relationships_unique.csv" --delimiter ";" --array-delimiter "|"```

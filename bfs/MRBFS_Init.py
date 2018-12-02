@@ -45,7 +45,6 @@ class MRBFSInit(MRJob):
     def reducer(self,id,info):
 
         info = list(info)[0]
-        print(info)
 
         s = ""
         for i in range(0,len(info[5])):
