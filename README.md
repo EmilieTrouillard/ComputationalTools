@@ -154,7 +154,9 @@ ComputationalTools$ python apsp/MRAPSP_main.py sample/graphfile_global_MergedRed
 
 The project is split in several subfolders to improve understandability.
 
-* bfs: Stores everything related to bfs.
+* apsp: Stores script generating shortest paths for all pairs (all pairs shortest path).
+
+* bfs: Stores everything related to bfs (standard & map reduce versions).
 
 * data: Stores all data used in the project.
 
@@ -163,6 +165,8 @@ The project is split in several subfolders to improve understandability.
 * interface: Stores everything related to the interface of the wikilinks system.
 
 * preprocessing: Stores all scripts used to pre-process wikipedia's data.
+
+* sample: directory used for demo purposes.
 
 
 ## Git Instructions
@@ -239,6 +243,7 @@ Make sure the database runs. To boot it from shell, type in ```sh ./bin/neo4j st
 ## DEV OPS
 
 [link for the server configuration](https://vladikk.com/2013/09/12/serving-flask-with-nginx-on-ubuntu/)
+
 [link for https certification](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-debian-9)
 
 Import DB on server:
