@@ -1,6 +1,6 @@
-# ComputationalTools
+# WIKILNKS
 
-Computational Tools for Data Science - Project
+DTU - 02807 Computational Tools for Data Science - Project
 
 Wikilinks is a system that lets anyone find the shortest path between two wikipedia articles, only using links
 
@@ -99,31 +99,58 @@ ComputationalTools/graphdb/dbconfig.py
 
 #### BFS:
 
-Getting the shortest path between two articles using standard bfs relies on the ```bfs/BFS.py``` script.
+*STANDARD BFS*
 
-**TODO**
-
-
+Getting the shortest path between two articles using standard bfs relies on the ```bfs/BFS.py``` script. It can be called with the command:
 ```
-ComputationalTools$ python bfs/BFS.py $inputFile$
+ComputationalTools$ python bfs/BFS.py $inputFile$ $options...
 ```
-With the sample graph file being present in ```sample/graphfile_global_MergedRedirect_NoDuplicate```, and recommended node, **0**. You can run
+
+With the sample graph file being present in ```sample/graphfile_global_MergedRedirect_NoDuplicate```
 ```
 ComputationalTools$ python bfs/BFS.py -h
 ```
-to learn more about the options. (To specify an end node for example).
+to learn more about the options. Exemple of an actual command:
+```
+ComputationalTools$ python bfs/BFS.py sample/graphfile_global_MergedRedirect_NoDuplicate -sn Apollo -en Alpha -ti sample/title_to_id_mapNoRedirect -it sample/id_to_title_mapNoRedirect
+```
+
+*MAP REDUCE SHORTEST PATH*
 
 For the implementation of the shortest path using map reduce bfs:
 ```
-ComputationalTools$ python bfs/MRBFS_main.py 
+ComputationalTools$ python bfs/MRBFS_main.py $inputFile$ $options...
 ```
 
 Here again, if more details about the arguments and possible options, run:
 ```
-omputationalTools$ python bfs/MRBFS_main.py -h
+ComputationalTools$ python bfs/MRBFS_main.py -h
 ```
 
-## Project Architecture
+Exemple of an actual running command:
+```
+python bfs/MRBFS_main.py sample/graphfile_global_MergedRedirect_NoDuplicate -s 0
+```
+
+#### All Pairs Shortest Paths:
+
+The script that generates all the shortest paths behind any pair of articles can be found in the ```apsp/``` folder. It can be called running the command:
+```
+ComputationalTools$ python apsp/MRAPSP_main.py $inputFile$ $options...
+```
+
+Once more, to learn more about the possible options, run:
+```
+ComputationalTools$ python apsp/MRAPSP_main.py -h
+```
+
+As an example, you can run the following command: 
+```
+ComputationalTools$ python apsp/MRAPSP_main.py sample/graphfile_global_MergedRedirect_NoDuplicate
+```
+
+
+## Project architecture and development information
 
 The project is split in several subfolders to improve understandability.
 
@@ -152,41 +179,68 @@ Note: If you fucked up something and want to drop a commit, you can do see by us
 
 Good Luck!
 
-## Interface & DB MISC
+## Interface
 
-To start the interface, simply run: ```export FLASK_APP=backInterface.py``` (```export FLASK_ENV=development``` for dev) and then ```python -m flask run```. /!\ To do this it is necessary to have flask installed. (See: http://flask.pocoo.org/docs/1.0/installation/).
+To start the interface, simply run: 
 
-#### neo4j
+```export FLASK_APP=backInterface.py``` 
+
+(```export FLASK_ENV=development``` for dev) 
+
+and then ```python -m flask run```. 
+
+/!\ To do this it is necessary to have flask installed. (If you are not using a virtualenv, it highly recommended to learn more about them, see [here](https://docs.python-guide.org/dev/virtualenvs/))
+
+```
+pip install flask
+```
+
+(See [here](http://flask.pocoo.org/docs/1.0/installation/) for details), 
+
+as well as the neo4j-driver.
+
+```
+pip install neo4j-driver
+```
+(See [here](https://neo4j.com/developer/python/) for details).
+
+
+#### DB: neo4j
 
 See [installation](https://neo4j.com/docs/operations-manual/current/installation/).
 
-**Changing Database**
+*Changing Database*
 
-edit the neo4j conf file. (See [File Locations](https://neo4j.com/docs/operations-manual/current/configuration/file-locations/)) to know where it is located. (Ex given on Debian)
+Edit the neo4j conf file. (See [File Locations](https://neo4j.com/docs/operations-manual/current/configuration/file-locations/)) to know where it is located. (Ex given on Debian)
 ```
 nano /etc/neo4j/neo4j.conf
 ```
 
-and then update the active database field with the database of your choice. 
+and then update the active database field with the database of your choice.
+
 ```
 dbms.active_database=wikilinks.db
 ```
 
-(We using 'wikilinks')
+(We are using 'wikilinks')
 
 and restart the database.
 
-**Changing Password**
+*Changing Password*
 
 At the start, the password of any database will be _neo4j_. See [here](https://neo4j.com/docs/operations-manual/current/configuration/set-initial-password/) to set a password.
 
-**Start from shell**
+*Start from shell*
+
 Make sure the database runs. To boot it from shell, type in ```sh ./bin/neo4j start``` from the neo4j folder.
+
+--------------------
 
 ## DEV OPS
 
 [link for the server configuration](https://vladikk.com/2013/09/12/serving-flask-with-nginx-on-ubuntu/)
+[link for https certification](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-debian-9)
 
-On server:
+Import DB on server:
 
 ```sudo neo4j-admin import --database wikilinks.db --id-type INTEGER --nodes:Page "/var/lib/neo4j/import/nodesCleanTitles.csv" --relationships:LINKS_TO "/var/lib/neo4j/import/relationships_unique.csv" --delimiter ";" --array-delimiter "|"```

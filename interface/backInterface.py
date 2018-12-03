@@ -10,6 +10,13 @@ app = Flask(__name__)
 def index():
     firstPage, secondPage, validPages, path = request.args.get('firstpage'), request.args.get('secondpage'), True, None
 
+    # QUICK SECURITY
+    if len(firstPage) > 500:
+        firstPage = None
+    if len(secondPage) > 500:
+        secondPage = None
+
+
     # GETTING THE SHORTEST PATH:
     if firstPage != None and secondPage != None:
         graphWorker, graphInterpreter = graph.GraphWorker(), graph.GraphInterpreter()
