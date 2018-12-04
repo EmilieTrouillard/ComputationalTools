@@ -15,8 +15,8 @@ import argparse
 
 
 INPUT_FILE = HOME_DIR + '/sample/jsonNames.txt'
-TITLE_TO_ID_FILENAME = HOME_DIR + '/sample/title_to_id_mapNoRedirect'
-ID_TO_TITLE_FILENAME = HOME_DIR + '/sample/id_to_title_mapNoRedirect'
+TITLE_TO_ID_FILENAME = HOME_DIR + '/sample/title_to_id'
+ID_TO_TITLE_FILENAME = HOME_DIR + '/sample/id_to_title'
 
 class aggregateIndex(MRJob):
 
@@ -48,8 +48,8 @@ class aggregateIndex(MRJob):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input_file", help="Name of file in which the name of the raw data files to consider are stored. DEFAULT '/sample/jsonNames.txt'", type=str)
-parser.add_argument("-ti", "--title_to_id_filename", help="Name of the output title to id file. DEFAULT '/sample/title_to_id_mapNoRedirect'", type=str)
-parser.add_argument("-it", "--id_to_title_filename", help="Name of the output id to title file. DEFAULT '/sample/id_to_title_mapNoRedirect'", type=str)
+parser.add_argument("-ti", "--title_to_id_filename", help="Name of the output title to id file. DEFAULT '/sample/title_to_id'", type=str)
+parser.add_argument("-it", "--id_to_title_filename", help="Name of the output id to title file. DEFAULT '/sample/id_to_title'", type=str)
 args = parser.parse_args()
 
 if args.input_file != None:

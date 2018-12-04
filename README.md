@@ -107,7 +107,7 @@ Getting the shortest path between two articles using standard bfs relies on the 
 ```
 ComputationalTools$ python bfs/BFS.py $inputFile$
 ```
-With the sample graph file being present in ```sample/graphfile_global_MergedRedirect_NoDuplicate```, and recommended node, **0**. You can run
+With the sample graph file being present in ```sample/graphfile```, and recommended node, **0**. You can run
 ```
 ComputationalTools$ python bfs/BFS.py -h
 ```

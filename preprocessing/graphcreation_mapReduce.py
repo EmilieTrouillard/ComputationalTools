@@ -15,12 +15,12 @@ import copy
 
 INPUT_FILE = HOME_DIR + '/sample/jsonNames.txt'
 DATA_DIR = '/data/'
-GRAPH_FILENAME = HOME_DIR + '/sample/graphfile_global_MergedRedirect_NoDuplicate'
+GRAPH_FILENAME = HOME_DIR + '/sample/graphfile'
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input_file", help="Name of file in which the name of the raw data files to consider are stored. DEFAULT '/sample/jsonNames.txt'", type=str)
-parser.add_argument("-o", "--output_file", help="Name of the output graph file. DEFAULT '/sample/graphfile_global_MergedRedirect_NoDuplicate'", type=str)
+parser.add_argument("-o", "--output_file", help="Name of the output graph file. DEFAULT '/sample/graphfile'", type=str)
 parser.add_argument("-d", "--data_dir", help="Name of the directory in which the raw data is stored (json Files). DEFAULT '/data/'", type=str)
 parser.add_argument("-ti", "--title_to_id_filename", help="Name of the title to id file.", type=str)
 parser.add_argument("-it", "--id_to_title_filename", help="Name of the id to title file.", type=str)
