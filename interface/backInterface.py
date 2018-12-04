@@ -11,10 +11,12 @@ def index():
     firstPage, secondPage, validPages, path = request.args.get('firstpage'), request.args.get('secondpage'), True, None
 
     # QUICK SECURITY
-    if len(firstPage) > 500:
-        firstPage = None
-    if len(secondPage) > 500:
-        secondPage = None
+    if firstPage != None:
+        if len(firstPage) > 500:
+            firstPage = None
+    if secondPage != None:
+        if len(secondPage) > 500:
+            secondPage = None
 
 
     # GETTING THE SHORTEST PATH:
