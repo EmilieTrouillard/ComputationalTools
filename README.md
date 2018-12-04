@@ -113,7 +113,7 @@ ComputationalTools$ python bfs/BFS.py -h
 ```
 to learn more about the options. Exemple of an actual command:
 ```
-ComputationalTools$ python bfs/BFS.py sample/graphfile_global_MergedRedirect_NoDuplicate -sn Apollo -en Alpha -ti sample/title_to_id_mapNoRedirect -it sample/id_to_title_mapNoRedirect
+ComputationalTools$ python bfs/BFS.py sample/graphfile -sn Apollo -en Alpha -ti sample/title_to_id -it sample/id_to_title
 ```
 
 *MAP REDUCE SHORTEST PATH*
@@ -130,7 +130,7 @@ ComputationalTools$ python bfs/MRBFS_main.py -h
 
 Exemple of an actual running command:
 ```
-python bfs/MRBFS_main.py sample/graphfile_global_MergedRedirect_NoDuplicate -s 0
+python bfs/MRBFS_main.py sample/graphfile_global -s 0
 ```
 
 #### All Pairs Shortest Paths:
@@ -147,7 +147,7 @@ ComputationalTools$ python apsp/MRAPSP_main.py -h
 
 As an example, you can run the following command: 
 ```
-ComputationalTools$ python apsp/MRAPSP_main.py sample/graphfile_global_MergedRedirect_NoDuplicate
+ComputationalTools$ python apsp/MRAPSP_main.py sample/graphfile
 ```
 
 
