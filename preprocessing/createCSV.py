@@ -1,6 +1,7 @@
 import pickle
 import os
 from readGraph import readPickled
+from utilities import HOME_DIR
 
 ### =================
 ### HELPERS
@@ -20,7 +21,6 @@ from indexcreation_mapReduce import ID_TO_TITLE_FILENAME
 from graphcreation_mapReduce import GRAPH_FILENAME
 
 # FILES
-HOME_DIR = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[:-1])
 NODES_CSV_FILENAME = HOME_DIR + '/sample/nodes_wikilinks.csv'
 RELATIONSHIPS_CSV_FILENAME = HOME_DIR + '/sample/relationships_wikilinks.csv'
 
