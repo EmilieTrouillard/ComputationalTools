@@ -147,7 +147,9 @@ Go to ```http://localhost:5000/``` or ```http://localhost:8080/``` and you can n
 
 
 **/!\ NOTE**:
-There is no reason why would anyone's database config would be the same as ours. We created a db config file for one to change the credentials of the database in 
+If you see that your interface does not work because the database cannot be authorized, it is probably because your credentials to access neo4j are not the same as ours. 
+By default the credentials are username: 'neo4j', password: 'neo4j'
+To update them modify the file:
 ```
 ComputationalTools/graphdb/dbconfig.py
 ```
