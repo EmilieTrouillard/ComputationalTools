@@ -88,7 +88,7 @@ To run the wikilinks interface, it is necessary to populate the graph database t
 ComputationalTools$ python preprocessing/createCSV.py
 ```
 
-To proceed with the next steps, it is needed to have ```neo4j``` installed. To learn more about ```neo4j```, head over to the [neo4j section](#neo4j). 
+To proceed with the next steps, it is needed to have ```neo4j``` installed. To learn more about ```neo4j```, head over to the [neo4j section](#DB:neo4j). 
 You can then copy the given csv files to a place where the database can import from them. Then run the following command with ```$NEO4J_FOLDERS$```being the home folder of ```neo4j```. (See [Neo4j File Locations](https://neo4j.com/docs/operations-manual/current/configuration/file-locations/) to learn where it is).
 ```
 cp sample/nodes_wikilinks.csv $NEO4J_FOLDER$/import/ && cp sample/relationships_wikilinks.csv $NEO4J_FOLDER$/import/
@@ -99,7 +99,7 @@ If you have neo4j already running, stop it.
 NEO4J-FOLDER$ ./bin/neo4j stop
 ```
 
-The following commands imports the csv files in database. Make sure that you don't have any databse called ```wikilinks``` If you need help regarding neo4j, see the [neo4j section](#neo4j).
+The following commands imports the csv files in database. Make sure that you don't have any databse called ```wikilinks``` If you need help regarding neo4j, see the [neo4j section](#DB:neo4j).
 ```
 NEO4J-FOLDER$ ./bin/neo4j-admin import --database wikilinks.db --id-type INTEGER --nodes:Page "import/nodes_wikilinks.csv" --relationships:LINKS_TO "import/relationships_wikilinks.csv" --delimiter ";" --array-delimiter "|"
 ```
