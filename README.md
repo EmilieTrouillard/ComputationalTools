@@ -170,6 +170,13 @@ As an example, you can run the following command:
 ComputationalTools$ python apsp/MRAPSP_main.py sample/graphfile
 ```
 
+You're done! ;)
+
+====================================================================
+
+===================== FOR PROJECT CONTRIBUTORS =====================
+
+====================================================================
 
 ## Project architecture and development information
 
