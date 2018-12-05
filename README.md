@@ -8,11 +8,17 @@ Wikilinks is a system that lets anyone find the shortest path between two wikipe
 
 ## Prerequisites
 
-* Python 3
+* Python 3, Packages:
 
-* MrJob
+    * [MrJob](https://pythonhosted.org/mrjob/)
 
-* numpy
+    * [numpy](http://www.numpy.org/)
+
+    * If you want to be able to run the interface and the graph database, you will also need: 
+
+        * [Flask](http://flask.pocoo.org/docs/1.0/quickstart/)
+
+        * [neo4j-driver](https://neo4j.com/developer/python/)
 
 
 ## Create your own wikilinks
