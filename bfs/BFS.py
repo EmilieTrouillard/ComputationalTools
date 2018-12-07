@@ -58,7 +58,6 @@ class BFS():
 
         distances = [0 for i in range (0,100)]
         distances[0] = 1
-        nInf = 0
 
         while len(curqueue) > 0:
             d += 1
@@ -74,18 +73,6 @@ class BFS():
                         nextqueue.append(neighbor)
             curqueue = nextqueue
             nextqueue = []
-
-        for di in dist:
-            if di==inf:
-                nInf += 1
-
-        # Is that needed ?
-
-        # print(distances)
-        # print(sum(distances[9:]))
-        # print(nInf)
-        # print(sum(distances)+nInf)
-        # print(self._n)
 
         path = []
         for i in range (0,self._n):

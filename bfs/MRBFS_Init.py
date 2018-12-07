@@ -3,7 +3,6 @@ from mrjob.job import MRJob
 from numpy import inf
 import copy
 
-## The user should set the variables allpaths, startnode and endnode.
 ALLPATHS = True
 STARTNODE = 0
 ENDNODE = 9
